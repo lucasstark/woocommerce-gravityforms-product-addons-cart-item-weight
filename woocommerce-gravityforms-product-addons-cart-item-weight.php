@@ -2,7 +2,7 @@
 
 /*
  * Plugin Name:  WooCommerce Gravity Forms Product Add-Ons Cart Item Weight
- * Plugin URI: https://github.com/lucasstark/woocommerce-debug-order-item-meta-data
+ * Plugin URI: https://github.com/lucasstark/woocommerce-gravityforms-product-addons-cart-item-weight
  * Description: This plugin will allow you to use gravity form's fields to set a cart item's weight.  Requires the Gravity Forms Product Addons plugin.
  * Version: 1.0.0
  * Author: Lucas Stark
