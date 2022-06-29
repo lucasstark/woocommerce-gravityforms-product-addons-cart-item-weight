@@ -21,15 +21,15 @@
 class ES_GFPA_CartItemWeight_Main {
 	private static $instance = null;
 
-	public static function register(){
-		if (self::$instance == null) {
+	public static function register() {
+		if ( self::$instance == null ) {
 			self::$instance = new ES_GFPA_CartItemWeight_Main();
 		}
 	}
 
 	public static $scripts_version = '1.0.1';
 
-	public function __construct( ) {
+	public function __construct() {
 		require 'ES_GFPA_CartItemWeight.php';
 
 		add_action( 'admin_enqueue_scripts', array( $this, 'on_admin_enqueue_scripts' ), 100 );
@@ -50,6 +50,10 @@ class ES_GFPA_CartItemWeight_Main {
 
 		if ( isset( $_POST['enable_cart_weight_management'] ) ) {
 			$gravity_form_data['enable_cart_weight_management'] = $_POST['enable_cart_weight_management'];
+		}
+
+		if ( isset( $_POST['enable_cart_weight_display'] ) ) {
+			$gravity_form_data['enable_cart_weight_display'] = $_POST['enable_cart_weight_display'];
 		}
 
 		return $gravity_form_data;
@@ -75,7 +79,7 @@ class ES_GFPA_CartItemWeight_Main {
 			die();
 		}
 
-		$product_id = $_POST['product_id'] ?? 0;
+		$product_id     = $_POST['product_id'] ?? 0;
 		$selected_field = '';
 		if ( $product_id ) {
 			$gravity_form_data = wc_gfpa()->get_gravity_form_data( $product_id );
@@ -86,7 +90,7 @@ class ES_GFPA_CartItemWeight_Main {
 			}
 		}
 
-		$markup = ES_GFPA_CartItemWeight_Main::get_field_markup($form_id, $selected_field);
+		$markup = ES_GFPA_CartItemWeight_Main::get_field_markup( $form_id, $selected_field, $gravity_form_data['enable_cart_weight_display'] ?? 'no' );
 
 		$response = array(
 			'status'  => 'success',
@@ -111,7 +115,7 @@ class ES_GFPA_CartItemWeight_Main {
 	}
 
 
-	public static function get_field_markup( $form_id, $selected_field = '' ) {
+	public static function get_field_markup( $form_id, $selected_field = '', $show_weight = 'no' ) {
 		$form   = GFAPI::get_form( $form_id );
 		$fields = GFAPI::get_fields_by_type( $form, array( 'quantity', 'number', 'singleproduct' ), false );
 
@@ -133,6 +137,17 @@ class ES_GFPA_CartItemWeight_Main {
 					'description' => __( 'A field to use to control cart item weight.', 'wc_gf_addons' )
 				)
 			);
+
+			woocommerce_wp_select( array(
+				'id'          => 'enable_cart_weight_display',
+				'label'       => __( 'Show Weight?', 'wc_gf_addons' ),
+				'value'       => $show_weight,
+				'options'     => array(
+					'no'  => __( 'No', 'wc_gf_addons' ),
+					'yes' => __( 'Yes', 'wc_gf_addons' )
+				),
+				'description' => __( 'Choose to show the the cart item\'s weight differences.', 'wc_gf_addons' )
+			) );
 
 			$markup = ob_get_clean();
 		} else {

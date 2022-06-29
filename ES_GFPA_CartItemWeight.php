@@ -110,7 +110,13 @@ class ES_GFPA_CartItemWeight {
 
 
 	public function display_cart_item_weight( $item_data, $cart_item ) {
-		if ( isset( $cart_item['weight'] ) ) {
+		$the_product_id = $cart_item['data']->get_id();
+		if ( $cart_item['data']->is_type( 'variation' ) ) {
+			$the_product_id = $cart_item['data']->get_parent_id();
+		}
+		$gravity_form_data = wc_gfpa()->get_gravity_form_data( $the_product_id );
+		$show = $gravity_form_data['enable_cart_weight_display'] ?? 'no';
+		if ($show == 'yes' && isset( $cart_item['weight'] ) ) {
 			// Display original weight
 			if ( isset( $cart_item['weight']['default'] ) ) {
 				$item_data[] = array(

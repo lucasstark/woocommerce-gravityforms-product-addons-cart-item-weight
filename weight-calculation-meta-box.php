@@ -29,8 +29,8 @@
 
             <div id="gforms_weight_field_section">
 				<?php if ( isset($gravity_form_data['enable_cart_weight_management']) && $gravity_form_data['enable_cart_weight_management'] == 'yes' ): ?>
-					<?php echo ES_GFPA_CartItemWeight_Main::get_field_markup( $gravity_form_data['id'], $gravity_form_data['cart_weight_field'] ); ?>
-				<?php endif; ?>
+					    <?php echo ES_GFPA_CartItemWeight_Main::get_field_markup( $gravity_form_data['id'], $gravity_form_data['cart_weight_field'] ?? '', $gravity_form_data['enable_cart_weight_display'] ?? 'no' ); ?>
+                <?php endif; ?>
             </div>
 
         </div>
